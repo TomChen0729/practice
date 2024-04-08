@@ -16,30 +16,27 @@ class ArticlesController extends Controller
     }
 
     public function index(){
-        // $status = true;
-        // 獲取當前已登入的用戶資訊
-        // $user = Auth::user();
-        
-        // 獲取用戶名稱
-        // $username = $user->name;
-        // $user_id = $user->id;
-        // 獲取用戶電子郵件地址
-        // $email = $user->email;
-        // 透過ORM向資料庫撈資料，並透過with()方法優化查詢語句
-        // 越新的文章顯示在越前面
-        // 使用內建的分頁系統
+        // 檢查使用者登入狀態，如果沒有先將uid設null，要不然會拋錯
+        // 賦予uid為當前使用者之id
+        $uid = Auth::check() ? auth()->user()->id : null;
+        // 使用with()語句優化查詢，解決N+1問題，paginate()為laravel提供之分頁系統
         $articles = Article::with('user')->orderBy('id', 'desc')->paginate(3);
-        // $id = Article::with('user')->orderBy('id', 'desc')->get();
-        // $article = Article::find($id);
-        // $author_id = $user = $article->user->id;
-        // $author_email = $articles['email'];
-        // $user_id = auth()->user()->articles()->id;
-        // 渲染版面，並將撈出來的資料傳給前端
-        // 检查每篇文章的作者是否為當前登入者，將結果傳給前端
-        // $status = $author_id == $user_id;
-        
+
+        // 遍歷所有文章，查看每一篇文章的作者是否為當前使用者
+        foreach ($articles as $article) {
+            // 如果文章與當前使用者有關聯，進行判斷
+            if ($article->user) {
+                $author_id = $article->user->id; // author_id=作者的id  
+                $status = $author_id == $uid; // 判斷作者是否等於當前使用者
+                $article->status = $status; // 將status 添加進去articles裡面
+            } else {
+                // 處理沒有關聯的時候
+                return redirect('root')->with('notice', '出現意外錯誤');
+            }
+        }
+
+        // 渲染前端，並將資料傳送給前端，傳送包括status在內的articles
         return view('articles.index', ['articles' => $articles]);
-        // return view('articles.index', ['articles' => $articles])->with($user_id);
     }
     public function show($id){
         // 在index點擊目標文章時，會帶目標作者id，並送到DB去撈該篇文章的內容
