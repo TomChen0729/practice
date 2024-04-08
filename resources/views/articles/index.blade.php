@@ -16,7 +16,6 @@
             {{ $article -> created_at }} 由 {{ $article->user->name }} 分享
         </p>
         <p>UID = {{ $article -> user_id }}</p>
-        
         <div class="flex" style="display: flex;">
             <button><a href="{{ route('articles.edit', $article)}}">編輯</a></button>
             <!-- <a href="{{ route('articles.destroy', $article)}}">刪除</a> -->
@@ -26,7 +25,6 @@
                 <button type="submit" class="px-2 bg-red-500 text-red-100">刪除文章</button>
             </form>
         </div>
-        
     </div>
     @endforeach
     {{ $articles -> links() }}

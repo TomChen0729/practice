@@ -16,12 +16,28 @@ class ArticlesController extends Controller
     }
 
     public function index(){
+        // $status = true;
+        // 獲取當前已登入的用戶資訊
+        // $user = Auth::user();
+        
+        // 獲取用戶名稱
+        // $username = $user->name;
+        // $user_id = $user->id;
+        // 獲取用戶電子郵件地址
+        // $email = $user->email;
         // 透過ORM向資料庫撈資料，並透過with()方法優化查詢語句
         // 越新的文章顯示在越前面
         // 使用內建的分頁系統
         $articles = Article::with('user')->orderBy('id', 'desc')->paginate(3);
+        // $id = Article::with('user')->orderBy('id', 'desc')->get();
+        // $article = Article::find($id);
+        // $author_id = $user = $article->user->id;
+        // $author_email = $articles['email'];
         // $user_id = auth()->user()->articles()->id;
         // 渲染版面，並將撈出來的資料傳給前端
+        // 检查每篇文章的作者是否為當前登入者，將結果傳給前端
+        // $status = $author_id == $user_id;
+        
         return view('articles.index', ['articles' => $articles]);
         // return view('articles.index', ['articles' => $articles])->with($user_id);
     }
