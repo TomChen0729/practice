@@ -14,6 +14,8 @@
         <h2 class="font-bold text-lg"><a href="{{ route('articles.show', $article) }}">{{ $article -> title }}</a></h2>
         <p>
             {{ $article -> created_at }} 由 {{ $article->user->name }} 分享
+            <br>
+            <!-- 最後更新時間 {{ $article-> updated_at }} -->
         </p>
         <p>UID = {{ $article -> user_id }}</p>
         @if($article->status)
