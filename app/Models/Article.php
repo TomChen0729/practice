@@ -15,6 +15,7 @@ class Article extends Model
         'content'
     ];
     public function user(){
-        return $this->belongsTo('App\Models\User');
+        // return $this->belongsTo('App\Models\User');
+        return $this->belongsTo(User::class);
     }
 }
